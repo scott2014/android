@@ -21,7 +21,40 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int block0=0x7f020000;
+        public static final int block1=0x7f020001;
+        public static final int block2=0x7f020002;
+        public static final int block3=0x7f020003;
+        public static final int block4=0x7f020004;
+        public static final int block5=0x7f020005;
+        public static final int block6=0x7f020006;
+        public static final int block7=0x7f020007;
+        public static final int brim=0x7f020008;
+        public static final int courtbg=0x7f020009;
+        public static final int credits=0x7f02000a;
+        public static final int gameover=0x7f02000b;
+        public static final int gauge1=0x7f02000c;
+        public static final int gauge2=0x7f02000d;
+        public static final int ic_launcher=0x7f02000e;
+        public static final int icon=0x7f02000f;
+        public static final int line=0x7f020010;
+        public static final int mask=0x7f020011;
+        public static final int menu=0x7f020012;
+        public static final int menubg=0x7f020013;
+        public static final int menuword1=0x7f020014;
+        public static final int menuword2=0x7f020015;
+        public static final int num01=0x7f020016;
+        public static final int num02=0x7f020017;
+        public static final int options2=0x7f020018;
+        public static final int pause=0x7f020019;
+        public static final int pause2=0x7f02001a;
+        public static final int score=0x7f02001b;
+        public static final int setting=0x7f02001c;
+        public static final int speed=0x7f02001d;
+        public static final int tetris=0x7f02001e;
+        public static final int title=0x7f02001f;
+        public static final int top=0x7f020020;
+        public static final int zcl=0x7f020021;
     }
     public static final class id {
         public static final int action_settings=0x7f080001;

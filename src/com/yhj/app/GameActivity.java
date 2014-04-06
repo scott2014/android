@@ -9,7 +9,10 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_game);
+		//setContentView(R.layout.activity_game);
+		
+		TetrisView tv = new TetrisView(this);
+		setContentView(tv);
 	}
 
 	@Override
