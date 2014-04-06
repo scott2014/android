@@ -56,7 +56,37 @@ public class TileView {
 		mOffsetY++;
 		return true;
 	}
+	
+	//判断是否可以向左移动,同时向左移动
+	public boolean moveLeftOnCourt(Court court) {
+		for (int i=0;i<4;i++) {
+			for (int j=0;j<4;j++) {
+				if (mTile[i][j] != 0) {
+					if (!court.isSpace(getmOffsetX() + i - 1, getmOffsetY() + j)) {
+						return false;
+					}
+				}
+			}
+		}
+		mOffsetX --;
+		return true;
+	}
 
+	//判断是否可以向右移动,同时向右移动
+	public boolean moveRightOnCourt(Court court) {
+		for (int i=0;i<4;i++) {
+			for (int j=0;j<4;j++) {
+				if (mTile[i][j] != 0) {
+					if (!court.isSpace(mOffsetX + i + 1, mOffsetY + j)) {
+						return false;
+					}
+				}
+			}
+		}
+		mOffsetX ++;
+		return true;
+	}
+	
 	private boolean isUnderBaseline(int posY )
 	{
 		if(posY >= Court.COURT_HEIGHT)

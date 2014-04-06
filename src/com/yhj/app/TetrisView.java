@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 public class TetrisView extends View implements Runnable {
@@ -42,6 +43,10 @@ public class TetrisView extends View implements Runnable {
 		this.mNextTile = new TileView(mContext);
 		
 		this.mCourt = new Court(mContext);
+		
+		this.setFocusable(true);
+		
+		this.setOnKeyListener(new MyOnKeyListener());
 			
 		new Thread(this).start();
 	}
@@ -70,6 +75,8 @@ public class TetrisView extends View implements Runnable {
 			}*/
 			if(mIsCombo)
 			{
+				//只有在碰到最底下的时候才把值赋给mCourt
+				//这就保证了无需再刷新数据
 				mCourt.placeTile(mCurrentTile);
 				//////
 			//	mMPlayer.playMoveVoice();
@@ -95,7 +102,7 @@ public class TetrisView extends View implements Runnable {
 			moveDown();
 			
 			mLastMove = now;
-	}
+		}
 	}
 	
 	//mIsCombo标记是否可以继续往下移动
@@ -107,6 +114,22 @@ public class TetrisView extends View implements Runnable {
 				mIsCombo = true;
 		}
 	}
+	
+	private void moveLeft() {
+		if (!mIsCombo) {
+			if (!mCurrentTile.moveLeftOnCourt(mCourt)) {
+				mIsCombo = true;
+			}
+		}
+	}
+	
+	private void moveRight() {
+		if (!mIsCombo) {
+			if (!mCurrentTile.moveRightOnCourt(mCourt)) {
+				mIsCombo = true;
+			}
+		}
+	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -115,5 +138,30 @@ public class TetrisView extends View implements Runnable {
 		
 		this.mCourt.paintCourt(canvas);
 		this.mCurrentTile.paintTile(canvas);
+	}
+	
+	private class MyOnKeyListener implements View.OnKeyListener {
+
+		@Override
+		public boolean onKey(View view, int keyCode, KeyEvent event) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_DPAD_UP:
+				
+				break;
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+				moveDown();
+				break;
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+				moveLeft();
+				break;
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				moveRight();
+				break;
+
+			default:
+				break;
+			}
+			return false;
+		}
 	}
 }
