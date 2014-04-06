@@ -1,8 +1,9 @@
 package com.yhj.app;
 
 import java.util.Random;
-
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.Log;
 
 public class TileView {
@@ -61,6 +62,27 @@ public class TileView {
 		if(posY >= Court.COURT_HEIGHT)
 			return true;
 		return false;
+	}
+	
+	public void paintTile(Canvas canvas)
+	{
+		ResourceStore rs = new ResourceStore(mContext);
+		Paint paint = new Paint();
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++) 
+			{
+				if (mTile[i][j] != 0) 
+				{
+					canvas.drawBitmap(mRs.getmBlocks()[mColor - 1], Court.BEGIN_DRAW_X
+							+ (i + mOffsetX) * Court.BLOCK_WIDTH, Court.BEGIN_DRAW_Y
+							+ (j + mOffsetY) * Court.BLOCK_WIDTH, paint);
+					
+					/*canvas.drawBitmap(mRs.getBlock(mColor -1), 0, 0, paint);*/
+				}
+			}
+		}
+		
 	}
 	
 	public int getmColor() {

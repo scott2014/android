@@ -1,6 +1,7 @@
 package com.yhj.app;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Message;
 import android.view.View;
 
@@ -97,12 +98,18 @@ public class TetrisView extends View implements Runnable {
 	}
 	
 	//mIsCombo标记是否可以继续往下移动
-		private void moveDown()
+	private void moveDown()
+	{
+		if(!mIsCombo)
 		{
-			if(!mIsCombo)
-			{
-				if( ! mCurrentTile.moveDownOnCourt(mCourt) )
-					mIsCombo = true;
-			}
+			if( ! mCurrentTile.moveDownOnCourt(mCourt) )
+				mIsCombo = true;
 		}
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		this.mCourt.paintCourt(canvas);
+		this.mCurrentTile.paintTile(canvas);
+	}
 }

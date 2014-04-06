@@ -20,6 +20,7 @@ public class RefreshHandler extends Handler {
 	@Override
 	public void handleMessage(Message msg) {
 		if (msg.what == REFRESH_VIEW) {
+			mTetrisView.play();
 			mTetrisView.invalidate();
 		}
 	}

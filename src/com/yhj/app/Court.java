@@ -1,6 +1,8 @@
 package com.yhj.app;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 
 public class Court {
 	
@@ -22,6 +24,18 @@ public class Court {
 	
 	public Court(Context context) {
 		this.mContext = context;
+		
+		clear();
+	}
+	
+	public void clear() {
+		if (mCourt != null ) {
+			for (int i=0;i<mCourt.length;i++) {
+				for (int j=0;j<mCourt[i].length;j++) {
+					mCourt[i][j] = 0;
+				}
+			}
+		}
 	}
 	
 
@@ -51,4 +65,21 @@ public class Court {
 			}
 		}
 	}
+	
+	public void paintCourt(Canvas canvas) {
+		Paint p = new Paint();
+		p.setAlpha(0x60);
+		canvas.drawBitmap(mRs.getmBackground(), 0, 0, p);
+		
+		p.setAlpha(0xee);
+		if (mCourt != null) {
+			for (int i=0;i<mCourt.length;i++) {
+				for (int j=0;j<mCourt[i].length;j++) {
+					if (mCourt[i][j] != 0) {
+						canvas.drawBitmap(mRs.getmBlocks()[mCourt[i][j] - 1], BEGIN_DRAW_X + i * Court.BLOCK_WIDTH, BEGIN_DRAW_Y + j*Court.BLOCK_WIDTH, p);
+					}
+				}
+			}
+		}
+	} 
 }

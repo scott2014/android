@@ -38,4 +38,34 @@ public class ResourceStore {
 		d.draw(canvas);
 		return bitmap;
 	}
+
+
+	public Bitmap[] getmBlocks() {
+		return mBlocks;
+	}
+
+
+	public void setmBlocks(Bitmap[] mBlocks) {
+		this.mBlocks = mBlocks;
+	}
+
+
+	public Context getmContext() {
+		return mContext;
+	}
+
+
+	public void setmContext(Context mContext) {
+		this.mContext = mContext;
+	}
+
+
+	public Bitmap getmBackground() {
+		return mBackground;
+	}
+
+
+	public void setmBackground(Bitmap mBackground) {
+		this.mBackground = mBackground;
+	}
 }
