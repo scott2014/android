@@ -3,6 +3,7 @@ package com.yhj.app;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 public class TetrisView extends View implements Runnable {
@@ -109,6 +110,9 @@ public class TetrisView extends View implements Runnable {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		Log.i("mCourt", mCourt + "");
+		Log.i("canvas",canvas + "");
+		
 		this.mCourt.paintCourt(canvas);
 		this.mCurrentTile.paintTile(canvas);
 	}

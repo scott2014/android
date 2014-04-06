@@ -19,7 +19,7 @@ public class ResourceStore {
 		Resources r = context.getResources();
 		
 		if (mBackground == null) {
-			this.mBackground = createImage(r.getDrawable(R.drawable.courtbg), Court.COURT_WIDTH * Court.BLOCK_WIDTH, Court.COURT_HEIGHT);
+			this.mBackground = createImage(r.getDrawable(R.drawable.courtbg), Court.COURT_WIDTH * Court.BLOCK_WIDTH, TetrisView.SCREEN_HEIGHT);
 		}
 		
 		if (mBlocks == null) {

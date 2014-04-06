@@ -25,6 +25,8 @@ public class Court {
 	public Court(Context context) {
 		this.mContext = context;
 		
+		mRs = new ResourceStore(context);
+		
 		clear();
 	}
 	
