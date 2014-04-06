@@ -57,4 +57,52 @@ public class TetrisView extends View implements Runnable {
 			}
 		}
 	}
+	
+	public void play() {
+		long now = System.currentTimeMillis();
+		if(now - mLastMove > mMoveDelay)
+		{
+			/*if(mIsPaused)
+			{
+				return;
+			}*/
+			if(mIsCombo)
+			{
+				mCourt.placeTile(mCurrentTile);
+				//////
+			//	mMPlayer.playMoveVoice();
+				
+				/*if(mCourt.isGameOver() )
+				{
+					mGamestate = STATE_OVER;
+					return;
+				}
+				int line = mCourt.removeLines();
+				if(line > 0 )
+				{
+					mMPlayer.playBombVoice();
+				}
+				mDeLine += line;
+				countScore(line);*/
+			
+				mCurrentTile = mNextTile;
+				mNextTile = new TileView(mContext);
+				
+				mIsCombo = false;
+			}
+			moveDown();
+			
+			mLastMove = now;
+	}
+	}
+	
+	//mIsCombo标记是否可以继续往下移动
+		private void moveDown()
+		{
+			if(!mIsCombo)
+			{
+				if( ! mCurrentTile.moveDownOnCourt(mCourt) )
+					mIsCombo = true;
+			}
+		}
 }

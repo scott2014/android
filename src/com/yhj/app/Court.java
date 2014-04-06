@@ -23,4 +23,32 @@ public class Court {
 	public Court(Context context) {
 		this.mContext = context;
 	}
+	
+
+	//判断此处是否为空
+	public boolean isSpace(int posX,int posY)
+	{
+		if (posX < 0 || posX >= COURT_WIDTH) 
+			return false;
+		if (posY < 0 || posY >= COURT_HEIGHT) 
+			return false;
+		if(0 == mCourt[posX][posY])
+			return true;
+		return false;
+	}
+
+	public void placeTile(TileView tile)
+	{
+		int i,j;
+		for (i = 0; i < 4; i++)
+		{
+			for (j = 0; j < 4; j++) 
+			{
+				if (tile.mTile[i][j] != 0)
+				{
+					mCourt[tile.getmOffsetX() + i][tile.getmOffsetY() + j] = tile.getmColor();
+				}
+			}
+		}
+	}
 }
