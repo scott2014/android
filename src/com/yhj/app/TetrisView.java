@@ -117,17 +117,13 @@ public class TetrisView extends View implements Runnable {
 	
 	private void moveLeft() {
 		if (!mIsCombo) {
-			if (!mCurrentTile.moveLeftOnCourt(mCourt)) {
-				mIsCombo = true;
-			}
+			mCurrentTile.moveLeftOnCourt(mCourt);
 		}
 	}
 	
 	private void moveRight() {
 		if (!mIsCombo) {
-			if (!mCurrentTile.moveRightOnCourt(mCourt)) {
-				mIsCombo = true;
-			}
+			mCurrentTile.moveRightOnCourt(mCourt);
 		}
 	}
 
