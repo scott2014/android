@@ -115,9 +115,11 @@ public class MainActivity extends Activity {
 			ListAdapter a = this.mListView.getAdapter();
 			int len = a.getCount();
 			for (int i=0;i<len;i++) {
-				EditText et = (EditText) a.getView(i, null, null);
+				/*EditText et = (EditText) a.getView(i, null, null);
+				String s = (String) a.getItem(i);
 				Log.i("EditText" + i,et.getText().toString());
-				Toast.makeText(this, "EditText" + i + ": " + et.getText().toString(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "EditText" + i + ": " + s, Toast.LENGTH_SHORT).show();*/
+				a.getItem(i);
 			}
 		}
 		return true;

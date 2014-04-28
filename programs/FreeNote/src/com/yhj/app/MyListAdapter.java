@@ -13,6 +13,8 @@ public class MyListAdapter extends BaseAdapter {
 	
 	private Context mContext = null;
 	
+	private EditText mEditText = null;
+	
 	public MyListAdapter(Context context) {
 		this.mContext = context;
 	}
@@ -26,26 +28,25 @@ public class MyListAdapter extends BaseAdapter {
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return null;
+		return mEditText.getText().toString();
 	}
 
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return 0;
+		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		EditText text = null;
 		if (convertView == null) {
 			LayoutInflater inflater = LayoutInflater.from(mContext);
 			View rootView = inflater.inflate(R.layout.content_list_item, null);
-			text = (EditText) rootView.findViewById(R.id.editText);
+			mEditText = (EditText) rootView.findViewById(R.id.editText);
 		} else {
-			text = (EditText)convertView;
+			mEditText = (EditText)convertView;
 		}
-		return text;
+		return mEditText;
 	}
 
 }
