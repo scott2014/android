@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -98,4 +99,21 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
 }
