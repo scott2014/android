@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -72,10 +73,21 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Fragment f = new AddFragment();
+				LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+				
+				View rootView = inflater.inflate(R.layout.note, null);
+				ListView listView = (ListView) rootView.findViewById(R.id.listView);
+				MyListAdapter adapter2 = new MyListAdapter(MainActivity.this);
+				listView.setAdapter(adapter2);
+				
+				
+				
+				Fragment f = new AddFragment(rootView);
 				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
 			}
 		});
+		
+	
 	}
 	
 	
