@@ -3,9 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:background="#efebc6">
-    
+<com.yhj.app.MyEditText android:id="@+id/note_title"
+                        android:layout_width="240dp"
+                        android:layout_height="50dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@null"
+                        android:layout_centerHorizontal="true"
+                        android:singleLine="true"
+                        android:typeface="monospace"/>
 <ListView android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:id="@+id/listView"></ListView>
+          android:id="@+id/listView"
+          android:layout_below="@id/note_title"
+          android:layout_marginTop="0dp"
+          android:dividerHeight="0dp"
+          android:divider="@android:color/transparent"
+          ></ListView>
     
 </RelativeLayout>

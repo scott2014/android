@@ -22,7 +22,7 @@ public class MyEditText extends EditText {
 		super.onDraw(canvas);
 		
 		Paint p = new Paint();
-		p.setStrokeWidth(2f);
+		p.setStrokeWidth(1f);
 		p.setColor(Color.BLACK);
 		
 		canvas.drawLine(0, this.getHeight()-1, this.getWidth()-1, this.getHeight()-1, p);

@@ -77,6 +77,7 @@ public class MainActivity extends Activity {
 				
 				View rootView = inflater.inflate(R.layout.note, null);
 				ListView listView = (ListView) rootView.findViewById(R.id.listView);
+				
 				MyListAdapter adapter2 = new MyListAdapter(MainActivity.this);
 				listView.setAdapter(adapter2);
 				
