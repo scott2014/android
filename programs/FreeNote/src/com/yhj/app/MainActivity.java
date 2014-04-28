@@ -8,14 +8,18 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -25,6 +29,10 @@ public class MainActivity extends Activity {
 	private ImageView mAdd = null;
 	
 	private ActionBarDrawerToggle mDrawerToggle = null;
+	
+	private ListView mListView = null;
+	
+	private MyListAdapter listAdapter = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +85,10 @@ public class MainActivity extends Activity {
 				LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 				
 				View rootView = inflater.inflate(R.layout.note, null);
-				ListView listView = (ListView) rootView.findViewById(R.id.listView);
+				mListView = (ListView) rootView.findViewById(R.id.listView);
 				
-				MyListAdapter adapter2 = new MyListAdapter(MainActivity.this);
-				listView.setAdapter(adapter2);
+				listAdapter = new MyListAdapter(MainActivity.this);
+				mListView.setAdapter(listAdapter);
 				
 				Fragment f = new AddFragment(rootView);
 				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
@@ -104,9 +112,15 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			
+			ListAdapter a = this.mListView.getAdapter();
+			int len = a.getCount();
+			for (int i=0;i<len;i++) {
+				EditText et = (EditText) a.getView(i, null, null);
+				Log.i("EditText" + i,et.getText().toString());
+				Toast.makeText(this, "EditText" + i + ": " + et.getText().toString(), Toast.LENGTH_SHORT).show();
+			}
 		}
-		return super.onKeyDown(keyCode, event);
+		return true;
 	}
 
 
