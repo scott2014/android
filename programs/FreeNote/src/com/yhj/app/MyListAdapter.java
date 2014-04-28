@@ -1,6 +1,8 @@
 package com.yhj.app;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -37,7 +39,9 @@ public class MyListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		EditText text = null;
 		if (convertView == null) {
-			text = new EditText(mContext);
+			LayoutInflater inflater = LayoutInflater.from(mContext);
+			View rootView = inflater.inflate(R.layout.content_list_item, null);
+			text = (EditText) rootView.findViewById(R.id.editText);
 		} else {
 			text = (EditText)convertView;
 		}

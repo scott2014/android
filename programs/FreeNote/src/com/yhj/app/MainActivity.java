@@ -80,8 +80,6 @@ public class MainActivity extends Activity {
 				MyListAdapter adapter2 = new MyListAdapter(MainActivity.this);
 				listView.setAdapter(adapter2);
 				
-				
-				
 				Fragment f = new AddFragment(rootView);
 				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
 			}
