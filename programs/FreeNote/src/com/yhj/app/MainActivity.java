@@ -9,7 +9,9 @@ import java.util.Set;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -40,6 +42,8 @@ public class MainActivity extends Activity {
 	//标题
 	private EditText mTitleEdit = null;
 	
+	private SQLiteOpenHelper helper = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,8 +69,11 @@ public class MainActivity extends Activity {
 		
 		this.mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
+		helper = new MySQLiteOpenHelper(this, "notes", null, 2, null);
+		SQLiteDatabase db = helper.getReadableDatabase();
+		
 		List<Note> notes = new ArrayList<Note>();
-		Note n1 = new Note();
+		/*Note n1 = new Note();
 		n1.setTitle("标题一");
 		Note n2 = new Note();
 		n2.setTitle("标题二");
@@ -77,8 +84,17 @@ public class MainActivity extends Activity {
 		notes.add(n1);
 		notes.add(n2);
 		notes.add(n3);
-		notes.add(n4);
-		
+		notes.add(n4);*/
+
+	//	String sql = "select * from note";
+		Cursor c = db.query("note", new String[] {"id","title","content"}, null, null, null, null, null);
+		while (c.moveToNext()) {
+			Note n = new Note();
+			n.setId(c.getInt(0));
+			n.setTitle(c.getString(1));
+			n.setContent(c.getString(2));
+			notes.add(n);
+		}
 		
 		BaseAdapter adapter = new TitleAdapter(this, notes);
 		this.mDrawerList.setAdapter(adapter);
@@ -135,11 +151,11 @@ public class MainActivity extends Activity {
 			
 			String title = mTitleEdit.getText().toString();
 			
-			SQLiteDatabase db = new MySQLiteOpenHelper(this, "notes", null, 2, null).getWritableDatabase();
 			
 			ContentValues values = new ContentValues();
 			values.put("title", title);
 			values.put("content", builder.toString());
+			SQLiteDatabase db = helper.getWritableDatabase();
 			db.insert("note", null, values);
 			Log.i("input",builder.toString());
 			this.finish();
