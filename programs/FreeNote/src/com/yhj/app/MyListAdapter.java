@@ -1,7 +1,11 @@
 package com.yhj.app;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import android.content.Context;
-import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +17,11 @@ public class MyListAdapter extends BaseAdapter {
 	
 	private Context mContext = null;
 	
-	private EditText mEditText = null;
+	//存储用户在EditText输入的值
+	//存储的key值
+	private final String KEY = "input";
+//	private Map<String,String> mValue = new HashMap<String,String>();
+	public Map<Integer,String> mValue = new LinkedHashMap<Integer, String>();
 	
 	public MyListAdapter(Context context) {
 		this.mContext = context;
@@ -28,7 +36,7 @@ public class MyListAdapter extends BaseAdapter {
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return mEditText.getText().toString();
+		return null;
 	}
 
 	@Override
@@ -38,15 +46,37 @@ public class MyListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		EditText editText = null;
 		if (convertView == null) {
 			LayoutInflater inflater = LayoutInflater.from(mContext);
 			View rootView = inflater.inflate(R.layout.content_list_item, null);
-			mEditText = (EditText) rootView.findViewById(R.id.editText);
+			editText = (EditText) rootView.findViewById(R.id.editText);
 		} else {
-			mEditText = (EditText)convertView;
+			editText = (EditText)convertView;
 		}
-		return mEditText;
+		
+	
+		editText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				mValue.put(position, s.toString());
+			}
+		});
+		
+		return editText;
 	}
 
 }

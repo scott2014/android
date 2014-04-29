@@ -1,10 +1,15 @@
 package com.yhj.app;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,9 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -33,6 +36,9 @@ public class MainActivity extends Activity {
 	private ListView mListView = null;
 	
 	private MyListAdapter listAdapter = null;
+	
+	//БъЬт
+	private EditText mTitleEdit = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +92,7 @@ public class MainActivity extends Activity {
 				
 				View rootView = inflater.inflate(R.layout.note, null);
 				mListView = (ListView) rootView.findViewById(R.id.listView);
+				mTitleEdit = (EditText) rootView.findViewById(R.id.note_title);
 				
 				listAdapter = new MyListAdapter(MainActivity.this);
 				mListView.setAdapter(listAdapter);
@@ -95,7 +102,6 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-	
 	}
 	
 	
@@ -112,15 +118,31 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			ListAdapter a = this.mListView.getAdapter();
-			int len = a.getCount();
-			for (int i=0;i<len;i++) {
-				/*EditText et = (EditText) a.getView(i, null, null);
-				String s = (String) a.getItem(i);
-				Log.i("EditText" + i,et.getText().toString());
-				Toast.makeText(this, "EditText" + i + ": " + s, Toast.LENGTH_SHORT).show();*/
-				a.getItem(i);
+			Map<Integer,String> map = listAdapter.mValue;
+			StringBuilder builder = new StringBuilder("");
+			
+			Set keySet = map.keySet();
+			Iterator<Integer> it = keySet.iterator();
+			while (it.hasNext()) {
+				Integer key = it.next();
+				String value = map.get(key);
+				builder.append(key)
+				       .append("#")
+				       .append(value)
+				       .append("@");
 			}
+			builder.deleteCharAt(builder.length()-1);
+			
+			String title = mTitleEdit.getText().toString();
+			
+			SQLiteDatabase db = new MySQLiteOpenHelper(this, "notes", null, 2, null).getWritableDatabase();
+			
+			ContentValues values = new ContentValues();
+			values.put("title", title);
+			values.put("content", builder.toString());
+			db.insert("note", null, values);
+			Log.i("input",builder.toString());
+			this.finish();
 		}
 		return true;
 	}

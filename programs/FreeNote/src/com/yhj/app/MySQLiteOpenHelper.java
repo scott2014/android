@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	
-	private final String sql = "create table note ( id Integer,title varchar(60),content text)";
+	private final String sql = "create table note ( id Integer primary key,title varchar(60),content text)";
 
 	public MySQLiteOpenHelper(Context context, String name,CursorFactory factory, int version,DatabaseErrorHandler errorHandler) {
 		super(context, name, factory, version, errorHandler);
