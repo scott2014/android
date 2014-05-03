@@ -30,13 +30,14 @@ public final class R {
         public static final int shape_title_line=0x7f020006;
     }
     public static final class id {
-        public static final int action_settings=0x7f080007;
+        public static final int action_settings=0x7f080008;
         public static final int add=0x7f080002;
         public static final int drawer_layout=0x7f080000;
         public static final int editText=0x7f080004;
-        public static final int listView=0x7f080006;
+        public static final int listView=0x7f080007;
         public static final int note_content=0x7f080001;
-        public static final int note_title=0x7f080003;
+        public static final int note_list=0x7f080003;
+        public static final int note_title=0x7f080006;
         public static final int textView=0x7f080005;
     }
     public static final class layout {

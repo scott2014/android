@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		this.mDrawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
-		this.mDrawerList = (ListView) this.findViewById(R.id.note_title);
+		this.mDrawerList = (ListView) this.findViewById(R.id.note_list);
 		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_launcher, R.string.app_name, R.string.app_name){
 
@@ -159,7 +160,15 @@ public class MainActivity extends Activity {
 			db.insert("note", null, values);
 			Log.i("input",builder.toString());
 			this.finish();
+			return true;
 		}
+		
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			PMenu p = new PMenu(MainActivity.this);
+			p.showAtLocation(mDrawerLayout, Gravity.LEFT | Gravity.BOTTOM, 0, 0);
+			return false;
+		}
+		
 		return true;
 	}
 
