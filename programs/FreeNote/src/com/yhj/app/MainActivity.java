@@ -2,6 +2,7 @@ package com.yhj.app;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +54,15 @@ public class MainActivity extends Activity {
 	
 	private PMenu p = null;
 	
+	//定义一个置位符号
+	//这个符号用于判断用户是点击标题进入记事本添加页面
+	//还是通过点击添加按钮进入添加页面
+	//默认为false，即是通过点击添加进入记事本页面
+	private boolean isShow = false;
+	
+	//点击的标题的笔记的内容
+	private Map<Integer,String> content = new LinkedHashMap<Integer, String>();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +78,8 @@ public class MainActivity extends Activity {
 		final View noteView = getLayoutInflater().inflate(R.layout.note, null);
 		mListView = (ListView) noteView.findViewById(R.id.listView);
 		mTitleEdit = (EditText) noteView.findViewById(R.id.note_title);
+		
+		listAdapter = new MyListAdapter(MainActivity.this,p,content);
 		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_launcher, R.string.app_name, R.string.app_name){
 
@@ -92,20 +104,7 @@ public class MainActivity extends Activity {
 		SQLiteDatabase db = helper.getReadableDatabase();
 		
 		List<Note> notes = new ArrayList<Note>();
-		/*Note n1 = new Note();
-		n1.setTitle("标题一");
-		Note n2 = new Note();
-		n2.setTitle("标题二");
-		Note n3 = new Note();
-		n3.setTitle("标题三");
-		Note n4 = new Note();
-		n4.setTitle("标题四");
-		notes.add(n1);
-		notes.add(n2);
-		notes.add(n3);
-		notes.add(n4);*/
 
-	//	String sql = "select * from note";
 		Cursor c = db.query("note", new String[] {"id","title","content"}, null, null, null, null, null);
 		while (c.moveToNext()) {
 			Note n = new Note();
@@ -125,7 +124,6 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 				
-				listAdapter = new MyListAdapter(MainActivity.this,p);
 				mListView.setAdapter(listAdapter);
 				
 				Fragment f = new AddFragment(noteView);
@@ -172,11 +170,24 @@ public class MainActivity extends Activity {
 				Fragment f = new AddFragment(noteView);
 				
 				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+				
+				String cc = n.getContent();
+				
+				Log.i("cc",cc);
+				
+				String[] s = cc.split("@");
+				for (String ss : s) {
+					String[] temp = ss.split("#");
+					
+					int pos = Integer.parseInt(temp[0]);
+					
+					content.put(pos, temp[1]);
+				}
+				
+				listAdapter = new MyListAdapter(MainActivity.this, p, content);
+				mListView.setAdapter(listAdapter);
 			}
-			
-			
 		});
-		
 	}
 	
 	

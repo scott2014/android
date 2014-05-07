@@ -25,13 +25,14 @@ public class MyListAdapter extends BaseAdapter {
 //	private Map<String,String> mValue = new HashMap<String,String>();
 	public Map<Integer,String> mValue = new LinkedHashMap<Integer, String>();
 	
-	private EditText editText = null;
-	
 	private PMenu mPMenu = null;
 	
-	public MyListAdapter(Context context,PMenu pmenu) {
+	private Map<Integer,String> content = null;
+	
+	public MyListAdapter(Context context,PMenu pmenu,Map<Integer,String> content) {
 		this.mContext = context;
 		this.mPMenu = pmenu;
+		this.content = content;
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class MyListAdapter extends BaseAdapter {
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return editText;
+		return mValue.get(position);
 	}
 
 	@Override
@@ -54,6 +55,7 @@ public class MyListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
+		 EditText editText = null;
 		if (convertView == null) {
 			LayoutInflater inflater = LayoutInflater.from(mContext);
 			View rootView = inflater.inflate(R.layout.content_list_item, null);
@@ -90,6 +92,10 @@ public class MyListAdapter extends BaseAdapter {
 				return false;
 			}
 		});
+		
+		if (content != null) {
+			editText.setText(content.get(position));
+		}
 		
 		return editText;
 	}
