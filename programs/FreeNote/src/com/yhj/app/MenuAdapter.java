@@ -3,6 +3,7 @@ package com.yhj.app;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MenuAdapter extends BaseAdapter {
@@ -41,22 +43,30 @@ public class MenuAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LinearLayout layout = null;
+		TextView textView = null;
 		
 		if (convertView == null) {
-			layout = new LinearLayout(mContext);
+			convertView = new LinearLayout(mContext);
+			textView = new TextView(mContext);
+			
+			convertView.setTag(textView);
 		} else {
-			layout = (LinearLayout)convertView;
+			textView = (TextView) convertView.getTag();
 		}
 		
-		layout.setLayoutParams(new GridView.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.setGravity(Gravity.CENTER);
+		layout = (LinearLayout) convertView;
 		
-		TextView item = new TextView(mContext);
-		item.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
-		item.setText(mItems.get(position));
+		layout.removeView(textView);
 		
-		layout.addView(item);
+		textView.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		textView.setText(mItems.get(position));
+		textView.setTextColor(Color.BLACK);
+		textView.setGravity(Gravity.CENTER);
+		textView.setTextSize(16);
+		
+		layout.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT,100));
+		layout.setBackgroundColor(0x3aadf0);
+		layout.addView(textView);
 		
 		return layout;
 	}

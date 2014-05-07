@@ -20,7 +20,6 @@ public class PMenu extends PopupWindow {
 		LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		layout.setOrientation(LinearLayout.HORIZONTAL);
-		layout.setBackgroundColor(Color.BLACK);
 		
 		GridView gridView = new GridView(context);
 		gridView.setFocusable(true);
@@ -38,7 +37,8 @@ public class PMenu extends PopupWindow {
 		gridView.setAdapter(adapter);
 		
 		layout.addView(gridView);
-		
+		layout.setBackgroundColor(Color.CYAN);
+
 		setContentView(layout);
 		
 		this.setWidth(LayoutParams.MATCH_PARENT);
