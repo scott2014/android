@@ -160,8 +160,9 @@ public class MainActivity extends Activity {
 		this.mDrawerList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				mDrawerLayout.closeDrawer(Gravity.START);
+				
 				Note n = (Note) titleAdapter.getItem(position);
 				Log.i("Note",n.getId() + "");
 				
@@ -211,6 +212,8 @@ public class MainActivity extends Activity {
 			
 				listAdapter = new MyListAdapter(MainActivity.this, p, content);
 				mListView.setAdapter(listAdapter);
+				
+				
 			}
 		});
 	}
