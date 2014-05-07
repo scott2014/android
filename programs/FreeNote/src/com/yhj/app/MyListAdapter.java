@@ -7,7 +7,9 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -23,8 +25,11 @@ public class MyListAdapter extends BaseAdapter {
 //	private Map<String,String> mValue = new HashMap<String,String>();
 	public Map<Integer,String> mValue = new LinkedHashMap<Integer, String>();
 	
-	public MyListAdapter(Context context) {
+	private PMenu mPMenu = null;
+	
+	public MyListAdapter(Context context,PMenu pmenu) {
 		this.mContext = context;
+		this.mPMenu = pmenu;
 	}
 
 	@Override
@@ -73,6 +78,15 @@ public class MyListAdapter extends BaseAdapter {
 			@Override
 			public void afterTextChanged(Editable s) {
 				mValue.put(position, s.toString());
+			}
+		});
+		
+		editText.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (mPMenu.isShowing()) mPMenu.dismiss();
+				return false;
 			}
 		});
 		

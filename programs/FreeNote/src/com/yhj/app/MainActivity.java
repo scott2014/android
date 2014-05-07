@@ -20,10 +20,14 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -45,13 +49,19 @@ public class MainActivity extends Activity {
 	
 	private SQLiteOpenHelper helper = null;
 	
+	private PMenu p = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
 		this.mDrawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
 		this.mDrawerList = (ListView) this.findViewById(R.id.note_list);
+		
+		p = new PMenu(MainActivity.this);
 		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_launcher, R.string.app_name, R.string.app_name){
 
@@ -63,7 +73,9 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onDrawerOpened(View drawerView) {
-				// TODO Auto-generated method stub
+				if (p.isShowing()) {
+					p.dismiss();
+				}
 				super.onDrawerOpened(drawerView);
 			}
 		};
@@ -111,13 +123,39 @@ public class MainActivity extends Activity {
 				mListView = (ListView) rootView.findViewById(R.id.listView);
 				mTitleEdit = (EditText) rootView.findViewById(R.id.note_title);
 				
-				listAdapter = new MyListAdapter(MainActivity.this);
+				listAdapter = new MyListAdapter(MainActivity.this,p);
 				mListView.setAdapter(listAdapter);
 				
 				Fragment f = new AddFragment(rootView);
+				
 				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+				
+				mTitleEdit.setOnTouchListener(new OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						if (p.isShowing()) p.dismiss();
+						return false;
+					}
+				});
+				
 			}
 		});
+		
+		//¼àÌý´¥ÆÁÊÂ¼þ
+		FrameLayout fl = (FrameLayout) this.findViewById(R.id.note_content);
+		
+		fl.setFocusable(true);
+		fl.setFocusableInTouchMode(true);
+		fl.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (p.isShowing()) p.dismiss();
+				return false;
+			}
+		});
+		
 		
 	}
 	
@@ -163,13 +201,17 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		
-		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			PMenu p = new PMenu(MainActivity.this);
-			p.showAtLocation(mDrawerLayout, Gravity.LEFT | Gravity.BOTTOM, 0, 0);
-			return false;
-		}
-		
-		return true;
+		return false;
+	}
+
+
+	
+	
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		Log.i("menu","onMenuOpened");
+		p.showAtLocation(mDrawerLayout, Gravity.LEFT | Gravity.BOTTOM, 0, 0);
+		return false;
 	}
 
 
@@ -179,4 +221,18 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onPause();
 	}
+
+
+
+/*	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (p.isShowing()) {
+				p.dismiss();
+			}
+		}
+		return true;
+	}
+	*/
+	
 }

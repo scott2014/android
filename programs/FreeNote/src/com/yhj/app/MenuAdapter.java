@@ -62,7 +62,7 @@ public class MenuAdapter extends BaseAdapter {
 		textView.setText(mItems.get(position));
 		textView.setTextColor(Color.BLACK);
 		textView.setGravity(Gravity.CENTER);
-		textView.setTextSize(16);
+		textView.setTextSize(18);
 		
 		layout.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT,100));
 		layout.setBackgroundColor(0x3aadf0);
