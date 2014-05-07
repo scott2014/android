@@ -59,6 +59,8 @@ public class TitleAdapter extends BaseAdapter {
 		//textView.setBackgroundDrawable(android.R.attr.activatedBackgroundIndicator);
 		//textView.setMinHeight(android.R.attr.listPreferredItemHeightSmall);
 */		textView.setText(this.mNotes.get(position).getTitle());
+
+		textView.setTag(this.mNotes.get(position).getId());
 		return textView;
 	}
 

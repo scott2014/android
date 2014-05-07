@@ -17,7 +17,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -25,7 +24,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -49,6 +49,8 @@ public class MainActivity extends Activity {
 	
 	private SQLiteOpenHelper helper = null;
 	
+	private TitleAdapter titleAdapter = null;
+	
 	private PMenu p = null;
 	
 	@Override
@@ -62,6 +64,10 @@ public class MainActivity extends Activity {
 		this.mDrawerList = (ListView) this.findViewById(R.id.note_list);
 		
 		p = new PMenu(MainActivity.this);
+		
+		final View noteView = getLayoutInflater().inflate(R.layout.note, null);
+		mListView = (ListView) noteView.findViewById(R.id.listView);
+		mTitleEdit = (EditText) noteView.findViewById(R.id.note_title);
 		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_launcher, R.string.app_name, R.string.app_name){
 
@@ -109,8 +115,8 @@ public class MainActivity extends Activity {
 			notes.add(n);
 		}
 		
-		BaseAdapter adapter = new TitleAdapter(this, notes);
-		this.mDrawerList.setAdapter(adapter);
+		titleAdapter = new TitleAdapter(this, notes);
+		this.mDrawerList.setAdapter(titleAdapter);
 		
 		this.mAdd = (ImageView) this.findViewById(R.id.add);
 		mAdd.setOnClickListener(new OnClickListener() {
@@ -119,26 +125,22 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 				
-				View rootView = inflater.inflate(R.layout.note, null);
-				mListView = (ListView) rootView.findViewById(R.id.listView);
-				mTitleEdit = (EditText) rootView.findViewById(R.id.note_title);
-				
 				listAdapter = new MyListAdapter(MainActivity.this,p);
 				mListView.setAdapter(listAdapter);
 				
-				Fragment f = new AddFragment(rootView);
+				Fragment f = new AddFragment(noteView);
 				
 				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
 				
-				mTitleEdit.setOnTouchListener(new OnTouchListener() {
-					
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						if (p.isShowing()) p.dismiss();
-						return false;
-					}
-				});
-				
+			}
+		});
+		
+		mTitleEdit.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (p.isShowing()) p.dismiss();
+				return false;
 			}
 		});
 		
@@ -156,6 +158,24 @@ public class MainActivity extends Activity {
 			}
 		});
 		
+		//抽屉标题点击事件监听
+		this.mDrawerList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Note n = (Note) titleAdapter.getItem(position);
+				Log.i("Note",n.getId() + "");
+				
+				mTitleEdit.setText(n.getTitle());
+				
+				Fragment f = new AddFragment(noteView);
+				
+				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+			}
+			
+			
+		});
 		
 	}
 	
@@ -170,7 +190,7 @@ public class MainActivity extends Activity {
 
 
 
-	@Override
+	/*@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			Map<Integer,String> map = listAdapter.mValue;
@@ -202,7 +222,7 @@ public class MainActivity extends Activity {
 		}
 		
 		return false;
-	}
+	}*/
 
 
 	
@@ -218,7 +238,32 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
+		if (mListView != null && mTitleEdit != null) {
+			Map<Integer,String> map = listAdapter.mValue;
+			StringBuilder builder = new StringBuilder("");
+			
+			Set keySet = map.keySet();
+			Iterator<Integer> it = keySet.iterator();
+			while (it.hasNext()) {
+				Integer key = it.next();
+				String value = map.get(key);
+				builder.append(key)
+				       .append("#")
+				       .append(value)
+				       .append("@");
+			}
+			builder.deleteCharAt(builder.length()-1);
+			
+			String title = mTitleEdit.getText().toString();
+			
+			
+			ContentValues values = new ContentValues();
+			values.put("title", title);
+			values.put("content", builder.toString());
+			SQLiteDatabase db = helper.getWritableDatabase();
+			db.insert("note", null, values);
+			Log.i("input",builder.toString());
+		}
 		super.onPause();
 	}
 
