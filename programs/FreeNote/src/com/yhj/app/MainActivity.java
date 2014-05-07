@@ -166,6 +166,7 @@ public class MainActivity extends Activity {
 				Log.i("Note",n.getId() + "");
 				
 				mTitleEdit.setText(n.getTitle());
+				mTitleEdit.setTag(n.getId());
 				
 				Fragment f = new AddFragment(noteView);
 				
@@ -175,15 +176,39 @@ public class MainActivity extends Activity {
 				
 				Log.i("cc",cc);
 				
-				String[] s = cc.split("@");
-				for (String ss : s) {
-					String[] temp = ss.split("#");
-					
-					int pos = Integer.parseInt(temp[0]);
-					
-					content.put(pos, temp[1]);
-				}
+				String[] s = null;
 				
+				if (cc != null) {
+					if (cc.contains("@")) {
+						s = cc.split("@");
+						
+						for (String ss : s) {
+							String[] temp = ss.split("#");
+							
+							int pos = Integer.parseInt(temp[0]);
+							
+							if (temp.length >= 2) {
+								content.put(pos, temp[1]);
+							} else {
+								content.put(pos,"");
+							}
+						}
+						
+					} else {
+						if (cc.contains("#")) {
+							String[] temp = cc.split("#");
+							
+							int pos = Integer.parseInt(temp[0]);
+							
+							if (temp.length >= 2) {
+								content.put(pos, temp[1]);
+							} else {
+								content.put(pos,"");
+							}
+						}
+					}
+				}
+			
 				listAdapter = new MyListAdapter(MainActivity.this, p, content);
 				mListView.setAdapter(listAdapter);
 			}
@@ -250,6 +275,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		if (mListView != null && mTitleEdit != null) {
+			
+			//判断是更新操作还是插入操作
+			//通过mTitleEdit中的id值进行判断
+			//如果id为空，则判断为插入操作，否则为 更新操作
+			Integer id = (Integer) mTitleEdit.getTag();
 			Map<Integer,String> map = listAdapter.mValue;
 			StringBuilder builder = new StringBuilder("");
 			
@@ -272,8 +302,13 @@ public class MainActivity extends Activity {
 			values.put("title", title);
 			values.put("content", builder.toString());
 			SQLiteDatabase db = helper.getWritableDatabase();
-			db.insert("note", null, values);
-			Log.i("input",builder.toString());
+			
+			if (id == null) {
+				db.insert("note", null, values);
+				Log.i("input",builder.toString());
+			} else {
+				db.update("note", values, "id=?", new String[] {String.valueOf(id)});
+			}
 		}
 		super.onPause();
 	}
