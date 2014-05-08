@@ -65,10 +65,11 @@ public class MainActivity extends Activity {
 	//点击的标题的笔记的内容
 	private Map<Integer,String> content = new LinkedHashMap<Integer, String>();
 	
-	//添加日记handler
+	//handler可以作为添加日志，和退出系统使用
 	private Handler addHandler = null;
 	
 	public static final int ADD = 0x1;
+	public static final int EXIT = 0x2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,7 @@ public class MainActivity extends Activity {
 					
 					if (p.isShowing()) p.dismiss();
 				}
+				if (msg.what == EXIT) finish();
 			}
 			
 		};
@@ -281,20 +283,21 @@ public class MainActivity extends Activity {
 			Map<Integer,String> map = listAdapter.mValue;
 			StringBuilder builder = new StringBuilder("");
 			
-			Set keySet = map.keySet();
-			Iterator<Integer> it = keySet.iterator();
-			while (it.hasNext()) {
-				Integer key = it.next();
-				String value = map.get(key);
-				builder.append(key)
-				       .append("#")
-				       .append(value)
-				       .append("@");
+			if (map.size() > 0) {
+				Set keySet = map.keySet();
+				Iterator<Integer> it = keySet.iterator();
+				while (it.hasNext()) {
+					Integer key = it.next();
+					String value = map.get(key);
+					builder.append(key)
+					       .append("#")
+					       .append(value)
+					       .append("@");
+				}
+				builder.deleteCharAt(builder.length()-1);
 			}
-			builder.deleteCharAt(builder.length()-1);
 			
 			String title = mTitleEdit.getText().toString();
-			
 			
 			ContentValues values = new ContentValues();
 			values.put("title", title);

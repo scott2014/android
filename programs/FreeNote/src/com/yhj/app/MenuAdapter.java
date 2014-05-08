@@ -7,8 +7,10 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -74,7 +76,7 @@ public class MenuAdapter extends BaseAdapter {
 		layout.setBackgroundColor(0x3aadf0);
 		layout.addView(textView);
 		
-		layout.setOnClickListener(new OnClickListener() {
+	/*	layout.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -83,6 +85,29 @@ public class MenuAdapter extends BaseAdapter {
 					msg.what = MainActivity.ADD;
 					mHandler.sendMessage(msg);
 				}
+				if (position == 2) {
+					Message msg = new Message();
+					msg.what = MainActivity.EXIT;
+					mHandler.sendMessage(msg);
+				}
+			}
+		});*/
+		
+		layout.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (position == 0) {
+					Message msg = new Message();
+					msg.what = MainActivity.ADD;
+					mHandler.sendMessage(msg);
+				}
+				if (position == 2) {
+					Message msg = new Message();
+					msg.what = MainActivity.EXIT;
+					mHandler.sendMessage(msg);
+				}
+				return false;
 			}
 		});
 		
