@@ -14,6 +14,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -63,6 +65,11 @@ public class MainActivity extends Activity {
 	//点击的标题的笔记的内容
 	private Map<Integer,String> content = new LinkedHashMap<Integer, String>();
 	
+	//添加日记handler
+	private Handler addHandler = null;
+	
+	public static final int ADD = 0x1;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,11 +80,37 @@ public class MainActivity extends Activity {
 		this.mDrawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
 		this.mDrawerList = (ListView) this.findViewById(R.id.note_list);
 		
-		p = new PMenu(MainActivity.this);
+		
 		
 		final View noteView = getLayoutInflater().inflate(R.layout.note, null);
 		mListView = (ListView) noteView.findViewById(R.id.listView);
 		mTitleEdit = (EditText) noteView.findViewById(R.id.note_title);
+		
+		this.addHandler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				if (msg.what == ADD) {
+					LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+					
+					mListView.setAdapter(listAdapter);
+					
+					Fragment f = new AddFragment(noteView);
+					
+					getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+				}
+			}
+			
+		};
+		
+		List<String> items = new ArrayList<String>();
+		items.add("添加");
+		items.add("保存");
+		items.add("退出");
+		
+		MenuAdapter adapter = new MenuAdapter(this,items,addHandler);
+		
+		p = new PMenu(this,adapter);
 		
 		listAdapter = new MyListAdapter(MainActivity.this,p,content);
 		
@@ -122,14 +155,9 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-				
-				mListView.setAdapter(listAdapter);
-				
-				Fragment f = new AddFragment(noteView);
-				
-				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
-				
+				Message msg = new Message();
+				msg.what = ADD;
+				addHandler.sendMessage(msg);
 			}
 		});
 		
@@ -228,44 +256,6 @@ public class MainActivity extends Activity {
 	}
 
 
-
-	/*@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Map<Integer,String> map = listAdapter.mValue;
-			StringBuilder builder = new StringBuilder("");
-			
-			Set keySet = map.keySet();
-			Iterator<Integer> it = keySet.iterator();
-			while (it.hasNext()) {
-				Integer key = it.next();
-				String value = map.get(key);
-				builder.append(key)
-				       .append("#")
-				       .append(value)
-				       .append("@");
-			}
-			builder.deleteCharAt(builder.length()-1);
-			
-			String title = mTitleEdit.getText().toString();
-			
-			
-			ContentValues values = new ContentValues();
-			values.put("title", title);
-			values.put("content", builder.toString());
-			SQLiteDatabase db = helper.getWritableDatabase();
-			db.insert("note", null, values);
-			Log.i("input",builder.toString());
-			this.finish();
-			return true;
-		}
-		
-		return false;
-	}*/
-
-
-	
-	
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 		Log.i("menu","onMenuOpened");
@@ -315,18 +305,4 @@ public class MainActivity extends Activity {
 		}
 		super.onPause();
 	}
-
-
-
-/*	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			if (p.isShowing()) {
-				p.dismiss();
-			}
-		}
-		return true;
-	}
-	*/
-	
 }

@@ -4,8 +4,11 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -19,9 +22,12 @@ public class MenuAdapter extends BaseAdapter {
 	private Context mContext = null;
 	private List<String> mItems = null;
 	
-	public MenuAdapter(Context context,List<String> items) {
+	private Handler mHandler = null;
+	
+	public MenuAdapter(Context context,List<String> items,Handler handler) {
 		this.mContext = context;
 		this.mItems = items;
+		this.mHandler = handler;
 	}
 	
 	@Override
@@ -41,7 +47,7 @@ public class MenuAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		LinearLayout layout = null;
 		TextView textView = null;
 		
@@ -67,6 +73,18 @@ public class MenuAdapter extends BaseAdapter {
 		layout.setLayoutParams(new ListView.LayoutParams(LayoutParams.MATCH_PARENT,100));
 		layout.setBackgroundColor(0x3aadf0);
 		layout.addView(textView);
+		
+		layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (position == 0) {
+					Message msg = new Message();
+					msg.what = MainActivity.ADD;
+					mHandler.sendMessage(msg);
+				}
+			}
+		});
 		
 		return layout;
 	}
