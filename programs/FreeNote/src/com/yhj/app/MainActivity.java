@@ -91,6 +91,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void handleMessage(Message msg) {
 				if (msg.what == ADD) {
+					content.clear();;
+					mTitleEdit.setTag(null);
+					mTitleEdit.setText("");
 					LayoutInflater inflater = MainActivity.this.getLayoutInflater();
 					
 					mListView.setAdapter(listAdapter);
