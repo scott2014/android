@@ -102,6 +102,13 @@ public class MenuAdapter extends BaseAdapter {
 					msg.what = MainActivity.ADD;
 					mHandler.sendMessage(msg);
 				}
+				
+				if (position == 1) {
+					Message msg = new Message();
+					msg.what = MainActivity.SAVE;
+					mHandler.sendMessage(msg);
+				}
+				
 				if (position == 2) {
 					Message msg = new Message();
 					msg.what = MainActivity.EXIT;

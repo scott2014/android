@@ -65,11 +65,15 @@ public class MainActivity extends Activity {
 	//点击的标题的笔记的内容
 	private Map<Integer,String> content = new LinkedHashMap<Integer, String>();
 	
-	//handler可以作为添加日志，和退出系统使用
-	private Handler addHandler = null;
+	//弹出菜单handler
+	private Handler handler = null;
 	
 	public static final int ADD = 0x1;
 	public static final int EXIT = 0x2;
+	public static final int SAVE = 0x3;
+	
+	//所有日记
+	private List<Note> mNotes = new ArrayList<Note>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +91,7 @@ public class MainActivity extends Activity {
 		mListView = (ListView) noteView.findViewById(R.id.listView);
 		mTitleEdit = (EditText) noteView.findViewById(R.id.note_title);
 		
-		this.addHandler = new Handler() {
+		this.handler = new Handler() {
 
 			@Override
 			public void handleMessage(Message msg) {
@@ -106,6 +110,14 @@ public class MainActivity extends Activity {
 					if (p.isShowing()) p.dismiss();
 				}
 				if (msg.what == EXIT) finish();
+				if (msg.what == SAVE) {
+					handleNote();
+					loadNote();
+					if (titleAdapter != null) {
+						titleAdapter.notifyDataSetChanged();
+						listAdapter.notifyDataSetChanged();
+					}
+				}
 			}
 			
 		};
@@ -115,7 +127,7 @@ public class MainActivity extends Activity {
 		items.add("保存");
 		items.add("退出");
 		
-		MenuAdapter adapter = new MenuAdapter(this,items,addHandler);
+		MenuAdapter adapter = new MenuAdapter(this,items,handler);
 		
 		p = new PMenu(this,adapter);
 		
@@ -143,7 +155,7 @@ public class MainActivity extends Activity {
 		helper = new MySQLiteOpenHelper(this, "notes", null, 2, null);
 		SQLiteDatabase db = helper.getReadableDatabase();
 		
-		List<Note> notes = new ArrayList<Note>();
+		/*List<Note> notes = new ArrayList<Note>();
 
 		Cursor c = db.query("note", new String[] {"id","title","content"}, null, null, null, null, null);
 		while (c.moveToNext()) {
@@ -152,9 +164,12 @@ public class MainActivity extends Activity {
 			n.setTitle(c.getString(1));
 			n.setContent(c.getString(2));
 			notes.add(n);
-		}
+		}*/
 		
-		titleAdapter = new TitleAdapter(this, notes);
+		
+		loadNote();
+		
+		titleAdapter = new TitleAdapter(this, mNotes);
 		this.mDrawerList.setAdapter(titleAdapter);
 		
 		this.mAdd = (ImageView) this.findViewById(R.id.add);
@@ -164,7 +179,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Message msg = new Message();
 				msg.what = ADD;
-				addHandler.sendMessage(msg);
+				handler.sendMessage(msg);
 			}
 		});
 		
@@ -200,6 +215,16 @@ public class MainActivity extends Activity {
 				
 				Note n = (Note) titleAdapter.getItem(position);
 				Log.i("Note",n.getId() + "");
+				
+				//点击标题，从数据库中重新查询一遍，解决直接点击保存按钮的情况
+				SQLiteDatabase db = helper.getReadableDatabase();
+				
+				Cursor c = db.query("note", new String[]{"title","content"}, "id=?", new String[] {String.valueOf(n.getId())}, null, null, null);
+				
+				while (c.moveToNext()) {
+					n.setTitle(c.getString(0));
+					n.setContent(c.getString(1));
+				}
 				
 				mTitleEdit.setText(n.getTitle());
 				mTitleEdit.setTag(n.getId());
@@ -274,6 +299,11 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPause() {
+		handleNote();
+		super.onPause();
+	}
+	
+	private void handleNote() {
 		if (mListView != null && mTitleEdit != null) {
 			
 			//判断是更新操作还是插入操作
@@ -314,6 +344,19 @@ public class MainActivity extends Activity {
 				db.update("note", values, "id=?", new String[] {String.valueOf(id)});
 			}
 		}
-		super.onPause();
+	}
+	
+	private void loadNote() {
+		helper = new MySQLiteOpenHelper(this, "notes", null, 2, null);
+		SQLiteDatabase db = helper.getReadableDatabase();
+		
+		Cursor c = db.query("note", new String[] {"id","title","content"}, null, null, null, null, null);
+		while (c.moveToNext()) {
+			Note n = new Note();
+			n.setId(c.getInt(0));
+			n.setTitle(c.getString(1));
+			n.setContent(c.getString(2));
+			mNotes.add(n);
+		}
 	}
 }
