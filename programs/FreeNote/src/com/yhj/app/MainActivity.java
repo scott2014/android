@@ -115,7 +115,9 @@ public class MainActivity extends Activity {
 					loadNote();
 					if (titleAdapter != null) {
 						titleAdapter.notifyDataSetChanged();
-						listAdapter.notifyDataSetChanged();
+						titleAdapter = new TitleAdapter(MainActivity.this, mNotes);
+						mDrawerList.setAdapter(titleAdapter);
+						//listAdapter.notifyDataSetChanged();
 					}
 				}
 			}
@@ -225,6 +227,9 @@ public class MainActivity extends Activity {
 					n.setTitle(c.getString(0));
 					n.setContent(c.getString(1));
 				}
+				
+				c.close();
+				db.close();
 				
 				mTitleEdit.setText(n.getTitle());
 				mTitleEdit.setTag(n.getId());
@@ -343,12 +348,15 @@ public class MainActivity extends Activity {
 			} else {
 				db.update("note", values, "id=?", new String[] {String.valueOf(id)});
 			}
+			db.close();
 		}
 	}
 	
 	private void loadNote() {
 		helper = new MySQLiteOpenHelper(this, "notes", null, 2, null);
 		SQLiteDatabase db = helper.getReadableDatabase();
+		
+		mNotes.clear();
 		
 		Cursor c = db.query("note", new String[] {"id","title","content"}, null, null, null, null, null);
 		while (c.moveToNext()) {
@@ -358,5 +366,8 @@ public class MainActivity extends Activity {
 			n.setContent(c.getString(2));
 			mNotes.add(n);
 		}
+		
+		c.close();
+		db.close();
 	}
 }
