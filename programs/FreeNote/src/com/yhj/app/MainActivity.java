@@ -98,6 +98,8 @@ public class MainActivity extends Activity {
 					Fragment f = new AddFragment(noteView);
 					
 					getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+					
+					if (p.isShowing()) p.dismiss();
 				}
 			}
 			
