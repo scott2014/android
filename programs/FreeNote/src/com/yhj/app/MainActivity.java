@@ -302,8 +302,11 @@ public class MainActivity extends Activity {
 			SQLiteDatabase db = helper.getWritableDatabase();
 			
 			if (id == null) {
-				db.insert("note", null, values);
-				Log.i("input",builder.toString());
+				//如果标题和内容都为空的话，将不插入到数据库
+				if (!(title == null || title.trim().equals("")) || !(builder.toString().trim().equals(""))) {
+					db.insert("note", null, values);
+					Log.i("input",builder.toString());
+				}
 			} else {
 				db.update("note", values, "id=?", new String[] {String.valueOf(id)});
 			}
