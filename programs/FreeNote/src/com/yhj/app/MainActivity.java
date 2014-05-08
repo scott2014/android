@@ -9,6 +9,8 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,7 +28,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -79,13 +80,11 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+	//	requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
 		this.mDrawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
 		this.mDrawerList = (ListView) this.findViewById(R.id.note_list);
-		
-		
 		
 		final View noteView = getLayoutInflater().inflate(R.layout.note, null);
 		mListView = (ListView) noteView.findViewById(R.id.listView);
@@ -103,9 +102,14 @@ public class MainActivity extends Activity {
 					
 					mListView.setAdapter(listAdapter);
 					
+					//…Ë÷√ÃÊªª∂Øª≠
+					FragmentManager mgr = getFragmentManager();
+					FragmentTransaction ft = mgr.beginTransaction();
+					ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+					
 					Fragment f = new AddFragment(noteView);
 					
-					getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+					ft.replace(R.id.note_content, f).commit();
 					
 					if (p.isShowing()) p.dismiss();
 				}
@@ -234,9 +238,12 @@ public class MainActivity extends Activity {
 				mTitleEdit.setText(n.getTitle());
 				mTitleEdit.setTag(n.getId());
 				
+				FragmentManager mgr = getFragmentManager();
+				FragmentTransaction ft = mgr.beginTransaction();
+				
 				Fragment f = new AddFragment(noteView);
 				
-				getFragmentManager().beginTransaction().replace(R.id.note_content, f).commit();
+				ft.replace(R.id.note_content, f).commit();
 				
 				String cc = n.getContent();
 				
@@ -296,6 +303,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 		Log.i("menu","onMenuOpened");
+		p.setAnimationStyle(R.style.PopStyle);
 		p.showAtLocation(mDrawerLayout, Gravity.LEFT | Gravity.BOTTOM, 0, 0);
 		return false;
 	}
