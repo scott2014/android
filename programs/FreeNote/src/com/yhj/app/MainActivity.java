@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
 					//…Ë÷√ÃÊªª∂Øª≠
 					FragmentManager mgr = getFragmentManager();
 					FragmentTransaction ft = mgr.beginTransaction();
-					ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+				/*	ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);*/
 					
 					Fragment f = new AddFragment(noteView);
 					
