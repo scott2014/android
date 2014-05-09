@@ -4,14 +4,12 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.view.Gravity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.TextView;
 
 public class TitleAdapter extends BaseAdapter {
@@ -61,6 +59,17 @@ public class TitleAdapter extends BaseAdapter {
 */		textView.setText(this.mNotes.get(position).getTitle());
 
 		textView.setTag(this.mNotes.get(position).getId());
+		
+/*		textView.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(mContext, Confirm.class);
+				mContext.startActivity(intent);
+				return false;
+			}
+		});*/
 		return textView;
 	}
 

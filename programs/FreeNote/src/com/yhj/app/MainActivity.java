@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -30,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -109,7 +111,7 @@ public class MainActivity extends Activity {
 					
 					Fragment f = new AddFragment(noteView);
 					
-					ft.replace(R.id.note_content, f).commit();
+					ft.replace(R.id.note_content, f).commitAllowingStateLoss();
 					
 					if (p.isShowing()) p.dismiss();
 				}
@@ -243,7 +245,7 @@ public class MainActivity extends Activity {
 				
 				Fragment f = new AddFragment(noteView);
 				
-				ft.replace(R.id.note_content, f).commit();
+				ft.replace(R.id.note_content, f).commitAllowingStateLoss();
 				
 				String cc = n.getContent();
 				
@@ -286,6 +288,17 @@ public class MainActivity extends Activity {
 				mListView.setAdapter(listAdapter);
 				
 				
+			}
+		});
+		
+		this.mDrawerList.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id) {
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, Confirm.class);
+					startActivity(intent);
+					return true;
 			}
 		});
 	}
