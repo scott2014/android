@@ -20,7 +20,8 @@
               android:padding="10dp"
               android:textColor="#333"
               android:textSize="16sp"
-              android:text="@string/tip"/>
+              android:text="@string/tip"
+              android:id="@+id/tip"/>
     
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
