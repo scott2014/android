@@ -15,16 +15,20 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyWindowStyle" >
+       >
         <activity
             android:name="com.yhj.app.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:theme="@style/MyWindowStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="com.yhj.app.Confirm"
+                  android:theme="@style/MyDialogStyle"></activity>
     </application>
 
 </manifest>

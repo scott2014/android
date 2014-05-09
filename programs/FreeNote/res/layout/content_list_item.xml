@@ -13,6 +13,7 @@
 	android:typeface="monospace"
 	android:maxLength="21"
 	android:padding="0dp"
+	android:inputType="textNoSuggestions"
     >
     
 
