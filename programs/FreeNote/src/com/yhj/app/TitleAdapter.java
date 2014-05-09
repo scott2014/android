@@ -1,19 +1,23 @@
 package com.yhj.app;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class TitleAdapter extends BaseAdapter {
+public class TitleAdapter extends BaseAdapter implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4535334709947576456L;
+
 	private List<Note> mNotes = null;
 	
 	private Context mContext = null;

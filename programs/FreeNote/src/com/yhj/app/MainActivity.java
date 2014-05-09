@@ -1,5 +1,6 @@
 package com.yhj.app;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -295,9 +296,20 @@ public class MainActivity extends Activity {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,int position, long id) {
+					Note n = (Note) titleAdapter.getItem(position);
+					
 					Intent intent = new Intent();
 					intent.setClass(MainActivity.this, Confirm.class);
-					startActivity(intent);
+					
+					Bundle data = new Bundle();
+					data.putInt("id", n.getId());
+					data.putString("title", n.getTitle());
+			//		data.putSerializable("titleAdapter", titleAdapter);
+					
+					intent.putExtra("data", data);
+					
+					//startActivity(intent);
+					startActivityForResult(intent, 0xeee);
 					return true;
 			}
 		});
@@ -391,4 +403,28 @@ public class MainActivity extends Activity {
 		c.close();
 		db.close();
 	}
+
+
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		int id = data.getIntExtra("id", -1);
+		boolean flag = data.getBooleanExtra("flag",false);
+		
+		Log.i("id",String.valueOf(id));
+		Log.i("flag",String.valueOf(flag));
+		Log.i("requestCode",String.valueOf(requestCode));
+		
+		//根据返回结果做相应的处理
+		if (flag) {
+			SQLiteDatabase db = helper.getWritableDatabase();
+			db.delete("note", "id=?", new String[] {String.valueOf(id)});
+			loadNote();
+			titleAdapter.notifyDataSetChanged();
+			db.close();
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	
 }
